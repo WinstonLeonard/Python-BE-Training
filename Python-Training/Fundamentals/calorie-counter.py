@@ -5,9 +5,15 @@ user_calorie_databases = {}
 def create_calorie_entry(username, food, calories):
     # TODO
     # Step 1: Create a dictionary representing a calorie entry with 'food' and 'calories'
-    
+    calorieEntry = {"food": food,
+                    "calories": calories}
+
     # Step 2: Check if the user exists in the dictionary, and create a database if not
-    
+    if username in user_calorie_databases:
+        user_calorie_databases[username].append(calorieEntry)
+    else:
+        user_calorie_databases[username] = [calorieEntry]
+
     # Step 3: Append the entry to the user's calorie database
 
 # Read Operation for a specific user
@@ -15,12 +21,21 @@ def read_calorie_entries(username):
     # TODO
     # Step 1: Return the list of calorie entries for the specific user
     # Return an empty list if the user does not exist
+    if username in user_calorie_databases:
+        return (user_calorie_databases[username])
+    else:
+        return []
     
 
 # Update Operation for a specific user
 def update_calorie_entry(username, entry_index, food, calories):
     # TODO
     # Step 1: Check if the user exists and if the provided index is valid
+    if username in user_calorie_databases:
+        userArray = user_calorie_databases[username]
+        arrayLength = len(userArray)
+        if(entry_index < arrayLength):
+            userArray[entry_index] = {"food": food, "calories": calories}
 
     # Step 2: Update the calorie entry at the specified index with the new 'food' and 'calories'
 
@@ -29,6 +44,11 @@ def update_calorie_entry(username, entry_index, food, calories):
 def delete_calorie_entry(username, entry_index):
     # TODO
     # Step 1: Check if the user exists and if the provided index is valid
+        if username in user_calorie_databases:
+            userArray = user_calorie_databases[username]
+            arrayLength = len(userArray)
+            if(entry_index < arrayLength):
+                userArray.pop(entry_index)
 
     # Step 2: Delete the calorie entry at the specified index
 
@@ -37,15 +57,26 @@ def delete_calorie_entry(username, entry_index):
 def search_calorie_entries(username, search_term):
     # TODO
     # Step 1: Check if the user exists
-
+    result = []
+    
     # Step 2: Search for calorie entries containing the given search term in the 'food' field
     # Return an empty list for a user that doesn't exist
-    
+    if username in user_calorie_databases:
+        userArray = user_calorie_databases[username]
+        for entry in userArray:
+            if entry['food'] == search_term:
+                result.append(entry)
+    return result
 
 # Get a Single Entry for a specific user
 def get_calorie_entry(username, entry_index):
     # TODO
     # Step 1: Check if the user exists and if the provided index is valid
+    if username in user_calorie_databases:
+        userArray = user_calorie_databases[username]
+        arrayLength = len(userArray)
+        if (entry_index < arrayLength):
+            return userArray[entry_index]
 
     # Step 2: Retrieve and return the calorie entry at the specified index
     # Return None for an invalid username or index
@@ -56,6 +87,8 @@ def clear_calorie_entries(username):
     # TODO
     # Step 1: Check if the user exists
     # Step 2: Clear (empty) the entire calorie database for the specific user
+    if username in user_calorie_databases:
+        del user_calorie_databases[username]
     
 
 
